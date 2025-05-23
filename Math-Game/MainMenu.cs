@@ -1,12 +1,17 @@
-﻿namespace Math_Game;
+﻿using Math_Game.Models;
 
-internal class Menu
+namespace Math_Game;
+
+internal class MainMenu
 {
     GameEngine gameEngine = new GameEngine();
+
     internal void ShowMenu(string name, DateTime date)
     {
         Console.WriteLine("----------------------------------------------------");
         Console.WriteLine($"Hello {name}! It's {date.DayOfWeek}.");
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
         Console.WriteLine("\n");
 
         var isGameOn = true;
@@ -45,12 +50,34 @@ internal class Menu
                 case "e":
                     Console.WriteLine("Goodbye");
                     isGameOn = false;
-                    Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("You did not enter a valid option");
                     break;
             }
         } while (isGameOn);
+    }
+
+    internal Difficulty DifficultyMenu()
+    {
+        Console.WriteLine(@"Please choose a difficulty from the choices below:
+            B - Beginner
+            I - Intermediate
+            A - Advanced");
+        Console.WriteLine("----------------------------------------------------");
+
+        var difficulty = Console.ReadLine();
+
+        switch (difficulty.Trim().ToLower())
+        {
+            case "b":
+                return Difficulty.Beginner;
+            case "i":
+                return Difficulty.Intermediate;
+            case "a":
+                return Difficulty.Advanced;
+            default:
+                return 0;
+        }
     }
 }

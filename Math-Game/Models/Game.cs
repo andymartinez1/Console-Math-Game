@@ -9,6 +9,8 @@ public class Game
     internal int Rounds { get; set; }
     
     internal GameType Type {get; set;}
+    
+    internal Difficulty DifficultyLevel {get; set;}
 }
 
 internal enum GameType
@@ -17,4 +19,11 @@ internal enum GameType
     Subtraction,
     Multiplication,
     Division
+}
+
+internal enum Difficulty
+{
+    Beginner,
+    Intermediate,
+    Advanced
 }
