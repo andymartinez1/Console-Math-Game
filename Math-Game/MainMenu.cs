@@ -1,10 +1,11 @@
-﻿using Math_Game.Models;
+﻿using System.Text.RegularExpressions;
+using Math_Game.Models;
 
 namespace Math_Game;
 
 internal class MainMenu
 {
-    GameEngine gameEngine = new GameEngine();
+    private readonly GameEngine gameEngine = new();
 
     internal void ShowMenu(string name, DateTime date)
     {
@@ -29,6 +30,7 @@ internal class MainMenu
             Console.WriteLine("----------------------------------------------------");
 
             var gameSelected = Console.ReadLine();
+            var difficulty = DifficultyLevel.Beginner;
 
             switch (gameSelected.Trim().ToLower())
             {
@@ -36,46 +38,57 @@ internal class MainMenu
                     Helpers.PrintGames();
                     break;
                 case "a":
-                    gameEngine.AdditionGame("Addition Game");
+                    difficulty = DifficultyMenu();
+                    gameEngine.AdditionGame("Addition Game", difficulty);
                     break;
                 case "s":
-                    gameEngine.SubtractionGame("Subtraction Game");
+                    difficulty = DifficultyMenu();
+                    gameEngine.SubtractionGame("Subtraction Game", difficulty);
                     break;
                 case "m":
-                    gameEngine.MultiplicationGame("Multiplication Game");
+                    difficulty = DifficultyMenu();
+                    gameEngine.MultiplicationGame("Multiplication Game", difficulty);
                     break;
                 case "d":
-                    gameEngine.DivisionGame("Division Game");
+                    difficulty = DifficultyMenu();
+                    gameEngine.DivisionGame("Division Game", difficulty);
                     break;
                 case "e":
-                    Console.WriteLine("Goodbye");
+                    Console.WriteLine("Goodbye.");
                     isGameOn = false;
                     break;
                 default:
-                    Console.WriteLine("You did not enter a valid option");
+                    Console.WriteLine("You did not enter a valid option.");
                     break;
             }
         } while (isGameOn);
     }
 
-    internal Difficulty DifficultyMenu()
+    internal static DifficultyLevel DifficultyMenu()
     {
+        Console.Clear();
         Console.WriteLine(@"Please choose a difficulty from the choices below:
-            B - Beginner
-            I - Intermediate
-            A - Advanced");
+        B - Beginner
+        I - Intermediate
+        A - Advanced");
         Console.WriteLine("----------------------------------------------------");
 
-        var difficulty = Console.ReadLine();
+        var difficulty = Console.ReadLine().ToLower().Trim();
 
-        switch (difficulty.Trim().ToLower())
+        while (string.IsNullOrEmpty(difficulty) || !Regex.IsMatch(difficulty, "^(b|i|a)$"))
+        {
+            Console.WriteLine("You did not enter a valid option.");
+            difficulty = Console.ReadLine().ToLower().Trim();
+        }
+
+        switch (difficulty)
         {
             case "b":
-                return Difficulty.Beginner;
+                return DifficultyLevel.Beginner;
             case "i":
-                return Difficulty.Intermediate;
+                return DifficultyLevel.Intermediate;
             case "a":
-                return Difficulty.Advanced;
+                return DifficultyLevel.Advanced;
             default:
                 return 0;
         }

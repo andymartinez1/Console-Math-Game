@@ -4,75 +4,43 @@ namespace Math_Game;
 
 public class Helpers
 {
-    internal static List<Game> gamesPlayed = new List<Game>();
+    private static readonly List<Game> gamesPlayed = new();
 
     internal static void PrintGames()
     {
         Console.Clear();
         Console.WriteLine("Game History:");
         Console.WriteLine("----------------------------------------------------");
-        
-        if (gamesPlayed.Count == 0)
-        {
-            Console.WriteLine("No Games Played Yet.");
-        }
+
+        if (gamesPlayed.Count == 0) Console.WriteLine("No Games Played Yet.");
 
         foreach (var game in gamesPlayed)
-        {
-            Console.WriteLine($"{game.Date} - {game.Type} Game: Score = {game.Score} out of {game.Rounds} points");
-        }
+            Console.WriteLine(
+                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game: Score = {game.Score} out of {game.Rounds} points");
 
         Console.WriteLine("----------------------------------------------------\n");
         Console.WriteLine("Type any key to continue.");
         Console.ReadKey();
     }
 
-    internal static int[] GetFirstAndSecondNumber(Difficulty difficulty)
+    internal static int[] GetFirstAndSecondNumber(DifficultyLevel difficultyLevel)
     {
         var random = new Random();
         var result = new int[2];
+        int firstNumber;
+        int secondNumber;
 
-        if (difficulty == Difficulty.Beginner)
+        if (difficultyLevel == DifficultyLevel.Beginner)
         {
-            var firstNumber = random.Next(1, 99);
-            var secondNumber = random.Next(1, 99);
-
-            result[0] = firstNumber;
-            result[1] = secondNumber;
-
-            return result;
+            firstNumber = random.Next(1, 9);
+            secondNumber = random.Next(1, 9);
         }
-        else if (difficulty == Difficulty.Intermediate)
+        else if (difficultyLevel == DifficultyLevel.Intermediate)
         {
-            var firstNumber = random.Next(1, 199);
-            var secondNumber = random.Next(1, 199);
-
-            result[0] = firstNumber;
-            result[1] = secondNumber;
-
-            return result;
+            firstNumber = random.Next(1, 49);
+            secondNumber = random.Next(1, 49);
         }
-        else if (difficulty == Difficulty.Advanced)
-        {
-            var firstNumber = random.Next(1, 299);
-            var secondNumber = random.Next(1, 299);
-            result[0] = firstNumber;
-            result[1] = secondNumber;
-
-            return result;
-        }
-
-        return result;
-    }
-
-    internal static int[] GetDivisionNumbers()
-    {
-        var random = new Random();
-        var result = new int[2];
-        var firstNumber = random.Next(1, 99);
-        var secondNumber = random.Next(1, 99);
-
-        while (firstNumber % secondNumber != 0)
+        else
         {
             firstNumber = random.Next(1, 99);
             secondNumber = random.Next(1, 99);
@@ -84,20 +52,53 @@ public class Helpers
         return result;
     }
 
-    internal static void AddToHistory(int gameScore, int roundsPlayed, GameType gameType)
+    internal static int[] GetDivisionNumbers(DifficultyLevel difficultyLevel)
+    {
+        var random = new Random();
+        var divisionNumbers = GetFirstAndSecondNumber(difficultyLevel);
+        var firstNumber = divisionNumbers[0];
+        var secondNumber = divisionNumbers[1];
+
+        while (firstNumber % secondNumber != 0)
+            if (difficultyLevel == DifficultyLevel.Beginner)
+            {
+                firstNumber = random.Next(1, 9);
+                secondNumber = random.Next(1, 9);
+            }
+            else if (difficultyLevel == DifficultyLevel.Intermediate)
+            {
+                firstNumber = random.Next(1, 49);
+                secondNumber = random.Next(1, 49);
+            }
+            else
+            {
+                firstNumber = random.Next(1, 99);
+                secondNumber = random.Next(1, 99);
+            }
+
+        var result = new int[2];
+        result[0] = firstNumber;
+        result[1] = secondNumber;
+
+        return result;
+    }
+
+    internal static void AddToHistory(int gameScore, int roundsPlayed, GameType gameType,
+        DifficultyLevel difficultyLevel)
     {
         gamesPlayed.Add(new Game
         {
             Date = DateTime.Now,
             Score = gameScore,
             Rounds = roundsPlayed,
-            Type = gameType
+            Type = gameType,
+            DifficultyLevel = difficultyLevel
         });
     }
 
     internal static string? ValidateResults(string result)
     {
-        while (string.IsNullOrEmpty(result) || !Int32.TryParse(result, out _))
+        while (string.IsNullOrEmpty(result) || !int.TryParse(result, out _))
         {
             Console.WriteLine("Your answer needs to be an integer. try again.");
             result = Console.ReadLine();
