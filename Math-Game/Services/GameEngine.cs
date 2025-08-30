@@ -1,53 +1,55 @@
 ﻿using Math_Game.Models;
+using Math_Game.Utils;
+using Spectre.Console;
 
-namespace Math_Game;
+namespace Math_Game.Services;
 
 internal class GameEngine
 {
-    internal void AdditionGame(string message, DifficultyLevel difficulty)
+    internal void AdditionGame(string message, DifficultyLevel difficulty, GameType gameType)
     {
-        var random = new Random();
         var testLength = 5;
-        var score = 0;
 
         for (var i = 0; i < testLength; i++)
         {
             Console.Clear();
             Console.WriteLine(message);
 
-            var additionNumbers = new[] { 0, 0 };
+            int[] numbers = [2];
 
             if (difficulty == DifficultyLevel.Beginner)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Beginner);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Beginner);
             else if (difficulty == DifficultyLevel.Intermediate)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Intermediate);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Intermediate);
             else if (difficulty == DifficultyLevel.Advanced)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Advanced);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Advanced);
 
-            var firstNumber = additionNumbers[0];
-            var secondNumber = additionNumbers[1];
+            var firstNumber = numbers[0];
+            var secondNumber = numbers[1];
 
-            Console.WriteLine($"{firstNumber} + {secondNumber}");
-            var result = Console.ReadLine();
-
-            result = Helpers.ValidateResults(result);
-
-            if (int.Parse(result) == firstNumber + secondNumber)
+            switch (gameType)
             {
-                Console.WriteLine("Your answer was correct! Type any key to continue.");
-                score++;
-                Console.ReadKey();
+                case GameType.Addition:
+                    Console.WriteLine($"{firstNumber} + {secondNumber}");
+                    break;
+                case GameType.Subtraction:
+                    Console.WriteLine($"{firstNumber} - {secondNumber}");
+                    break;
+                case GameType.Multiplication:
+                    Console.WriteLine($"{firstNumber} * {secondNumber}");
+                    break;
+                case GameType.Division:
+                    break;
+                default:
+                    return;
             }
-            else
-            {
-                Console.WriteLine("Incorrect answer. Type any key to continue.");
-                Console.ReadKey();
-            }
+
+            var score = Helpers.CheckAnswer(firstNumber, secondNumber);
         }
 
         Helpers.AddToHistory(score, testLength, GameType.Addition, difficulty);
 
-        Console.WriteLine($"Game over. You scored {score} out of {testLength}!");
+        AnsiConsole.WriteLine($"Game over. You scored {score} out of {testLength}!");
         Console.WriteLine("Press any key to return to the main menu.");
         Console.ReadKey();
     }
@@ -102,7 +104,6 @@ internal class GameEngine
 
     internal void MultiplicationGame(string message, DifficultyLevel difficulty)
     {
-        var random = new Random();
         var testLength = 5;
         var score = 0;
 
@@ -111,17 +112,17 @@ internal class GameEngine
             Console.Clear();
             Console.WriteLine(message);
 
-            var additionNumbers = new[] { 0, 0 };
+            var numbers = new[] { 0, 0 };
 
             if (difficulty == DifficultyLevel.Beginner)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Beginner);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Beginner);
             else if (difficulty == DifficultyLevel.Intermediate)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Intermediate);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Intermediate);
             else if (difficulty == DifficultyLevel.Advanced)
-                additionNumbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Advanced);
+                numbers = Helpers.GetFirstAndSecondNumber(DifficultyLevel.Advanced);
 
-            var firstNumber = additionNumbers[0];
-            var secondNumber = additionNumbers[1];
+            var firstNumber = numbers[0];
+            var secondNumber = numbers[1];
 
             Console.WriteLine($"{firstNumber} * {secondNumber}");
             var result = Console.ReadLine();

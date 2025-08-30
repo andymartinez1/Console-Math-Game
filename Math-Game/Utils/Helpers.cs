@@ -1,10 +1,10 @@
 ﻿using Math_Game.Models;
 
-namespace Math_Game;
+namespace Math_Game.Utils;
 
-public class Helpers
+public static class Helpers
 {
-    private static readonly List<Game> gamesPlayed = new();
+    private static readonly List<Game> GamesPlayed = new();
 
     internal static void PrintGames()
     {
@@ -12,11 +12,13 @@ public class Helpers
         Console.WriteLine("Game History:");
         Console.WriteLine("----------------------------------------------------");
 
-        if (gamesPlayed.Count == 0) Console.WriteLine("No Games Played Yet.");
+        if (GamesPlayed.Count == 0)
+            Console.WriteLine("No Games Played Yet.");
 
-        foreach (var game in gamesPlayed)
+        foreach (var game in GamesPlayed)
             Console.WriteLine(
-                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game: Score = {game.Score} out of {game.Rounds} points");
+                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game: Score = {game.Score} out of {game.Rounds} points"
+            );
 
         Console.WriteLine("----------------------------------------------------\n");
         Console.WriteLine("Type any key to continue.");
@@ -83,17 +85,23 @@ public class Helpers
         return result;
     }
 
-    internal static void AddToHistory(int gameScore, int roundsPlayed, GameType gameType,
-        DifficultyLevel difficultyLevel)
+    internal static void AddToHistory(
+        int gameScore,
+        int roundsPlayed,
+        GameType gameType,
+        DifficultyLevel difficultyLevel
+    )
     {
-        gamesPlayed.Add(new Game
-        {
-            Date = DateTime.Now,
-            Score = gameScore,
-            Rounds = roundsPlayed,
-            Type = gameType,
-            DifficultyLevel = difficultyLevel
-        });
+        GamesPlayed.Add(
+            new Game
+            {
+                Date = DateTime.Now,
+                Score = gameScore,
+                Rounds = roundsPlayed,
+                Type = gameType,
+                DifficultyLevel = difficultyLevel,
+            }
+        );
     }
 
     internal static string? ValidateResults(string result)
@@ -107,17 +115,27 @@ public class Helpers
         return result;
     }
 
-    internal static string GetName()
+    internal static int CheckAnswer(int firstNumber, int secondNumber)
     {
-        Console.WriteLine("Please type your name:");
-        var name = Console.ReadLine();
+        var score = 0;
+        var result = Console.ReadLine();
 
-        while (string.IsNullOrEmpty(name))
+        result = ValidateResults(result);
+
+        if (int.Parse(result) == firstNumber + secondNumber)
         {
-            Console.WriteLine("Name cannot be empty. Try again.");
-            name = Console.ReadLine();
+            Console.WriteLine("Your answer was correct! Type any key to continue.");
+            score++;
+            Console.ReadKey();
+        }
+        else
+        {
+            Console.WriteLine("Incorrect answer. Type any key to continue.");
+            Console.ReadKey();
         }
 
-        return name;
+        return score;
     }
+
+    internal static void CalculateScore() { }
 }
