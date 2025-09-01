@@ -1,4 +1,4 @@
-﻿namespace Math_Game.Models;
+﻿namespace MathGame.Models;
 
 public class Game
 {
@@ -13,17 +13,17 @@ public class Game
     internal DifficultyLevel DifficultyLevel { get; set; }
 }
 
-internal enum GameType
+public enum GameType
 {
     Addition,
     Subtraction,
     Multiplication,
-    Division
+    Division,
 }
 
-internal enum DifficultyLevel
+public enum DifficultyLevel
 {
     Beginner,
     Intermediate,
-    Advanced
+    Advanced,
 }

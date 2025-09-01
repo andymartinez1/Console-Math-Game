@@ -1,6 +1,6 @@
-﻿using Math_Game.Models;
+﻿using MathGame.Models;
 
-namespace Math_Game.Utils;
+namespace MathGame.Utils;
 
 public static class Helpers
 {
@@ -28,7 +28,7 @@ public static class Helpers
     internal static int[] GetFirstAndSecondNumber(DifficultyLevel difficultyLevel)
     {
         var random = new Random();
-        var result = new int[2];
+        var firstAndSecondNumber = new int[2];
         int firstNumber;
         int secondNumber;
 
@@ -48,40 +48,38 @@ public static class Helpers
             secondNumber = random.Next(1, 99);
         }
 
-        result[0] = firstNumber;
-        result[1] = secondNumber;
+        firstAndSecondNumber[0] = firstNumber;
+        firstAndSecondNumber[1] = secondNumber;
 
-        return result;
+        return firstAndSecondNumber;
     }
 
     internal static int[] GetDivisionNumbers(DifficultyLevel difficultyLevel)
     {
         var random = new Random();
         var divisionNumbers = GetFirstAndSecondNumber(difficultyLevel);
-        var firstNumber = divisionNumbers[0];
-        var secondNumber = divisionNumbers[1];
+        var num1 = divisionNumbers[0];
+        var num2 = divisionNumbers[1];
 
-        while (firstNumber % secondNumber != 0)
-            if (difficultyLevel == DifficultyLevel.Beginner)
-            {
-                firstNumber = random.Next(1, 9);
-                secondNumber = random.Next(1, 9);
-            }
-            else if (difficultyLevel == DifficultyLevel.Intermediate)
-            {
-                firstNumber = random.Next(1, 49);
-                secondNumber = random.Next(1, 49);
-            }
-            else
-            {
-                firstNumber = random.Next(1, 99);
-                secondNumber = random.Next(1, 99);
-            }
+        if (difficultyLevel == DifficultyLevel.Beginner)
+        {
+            num2 = random.Next(1, 9);
+            num1 = num2 * random.Next(1, 5);
+        }
+        else if (difficultyLevel == DifficultyLevel.Intermediate)
+        {
+            num2 = random.Next(1, 49);
+            num1 = num2 * random.Next(1, 10);
+        }
+        else
+        {
+            num2 = random.Next(1, 99);
+            num1 = num2 * random.Next(1, 15);
+        }
 
         var result = new int[2];
-        result[0] = firstNumber;
-        result[1] = secondNumber;
-
+        result[0] = num1;
+        result[1] = num2;
         return result;
     }
 
@@ -115,27 +113,32 @@ public static class Helpers
         return result;
     }
 
-    internal static int CheckAnswer(int firstNumber, int secondNumber)
+    internal static bool IsAnswerCorrect(int firstNumber, int secondNumber, char operatorType)
     {
-        var score = 0;
-        var result = Console.ReadLine();
+        Console.WriteLine($"{firstNumber} {operatorType} {secondNumber}");
+        var userInput = Console.ReadLine();
 
-        result = ValidateResults(result);
+        userInput = ValidateResults(userInput);
+        var userAnswer = int.Parse(userInput);
 
-        if (int.Parse(result) == firstNumber + secondNumber)
+        var correctAnswer = operatorType switch
+        {
+            '+' => firstNumber + secondNumber,
+            '-' => firstNumber - secondNumber,
+            '*' => firstNumber * secondNumber,
+            '/' => firstNumber / secondNumber,
+            _ => throw new ArgumentException("Invalid operator"),
+        };
+
+        if (userAnswer == correctAnswer)
         {
             Console.WriteLine("Your answer was correct! Type any key to continue.");
-            score++;
             Console.ReadKey();
-        }
-        else
-        {
-            Console.WriteLine("Incorrect answer. Type any key to continue.");
-            Console.ReadKey();
+            return true;
         }
 
-        return score;
+        Console.WriteLine("Incorrect answer. Type any key to continue.");
+        Console.ReadKey();
+        return false;
     }
-
-    internal static void CalculateScore() { }
 }

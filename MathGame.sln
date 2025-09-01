@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Math-Game", "Math-Game\Math-Game.csproj", "{F63C85AA-4962-4C4B-A4D7-E9EA43BAFE2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathGame", "MathGame\MathGame.csproj", "{F63C85AA-4962-4C4B-A4D7-E9EA43BAFE2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

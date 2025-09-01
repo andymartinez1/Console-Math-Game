@@ -1,16 +1,31 @@
-﻿using Math_Game.Enums;
-using Math_Game.Models;
-using Math_Game.Services;
-using Math_Game.Utils;
+﻿using MathGame.Enums;
+using MathGame.Models;
+using MathGame.Services;
+using MathGame.Utils;
 using Spectre.Console;
 
-namespace Math_Game.Views;
+namespace MathGame.Views;
 
-internal class Menu
+public class MainMenu : IMainMenu
 {
-    private readonly GameEngine _gameEngine = new();
+    private readonly IGameService _gameService;
 
-    internal void MainMenu()
+    private readonly MenuOptions[] _menuOptions =
+    [
+        MenuOptions.ViewGameHistory,
+        MenuOptions.Addition,
+        MenuOptions.Subtraction,
+        MenuOptions.Multiplication,
+        MenuOptions.Division,
+        MenuOptions.Exit,
+    ];
+
+    public MainMenu(IGameService gameService)
+    {
+        _gameService = gameService;
+    }
+
+    public void GameMenu()
     {
         var isGameOn = true;
 
@@ -20,14 +35,8 @@ internal class Menu
             var mainMenuChoice = AnsiConsole.Prompt(
                 new SelectionPrompt<MenuOptions>()
                     .Title("Select a game mode:")
-                    .AddChoices(
-                        MenuOptions.ViewGameHistory,
-                        MenuOptions.Addition,
-                        MenuOptions.Subtraction,
-                        MenuOptions.Multiplication,
-                        MenuOptions.Division,
-                        MenuOptions.Exit
-                    )
+                    .AddChoices(_menuOptions)
+                    .UseConverter(mo => mo.GetDisplayName())
             );
 
             var difficulty = DifficultyLevel.Beginner;
@@ -40,22 +49,26 @@ internal class Menu
                 case MenuOptions.Addition:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameEngine.AdditionGame("Addition Game", difficulty, GameType.Addition);
+                    _gameService.MathGame("Addition Game", difficulty, GameType.Addition);
                     break;
                 case MenuOptions.Subtraction:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameEngine.SubtractionGame("Subtraction Game", difficulty);
+                    _gameService.MathGame("Subtraction Game", difficulty, GameType.Subtraction);
                     break;
                 case MenuOptions.Multiplication:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameEngine.MultiplicationGame("Multiplication Game", difficulty);
+                    _gameService.MathGame(
+                        "Multiplication Game",
+                        difficulty,
+                        GameType.Multiplication
+                    );
                     break;
                 case MenuOptions.Division:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameEngine.DivisionGame("Division Game", difficulty);
+                    _gameService.MathGame("Division Game", difficulty, GameType.Division);
                     break;
                 case MenuOptions.Exit:
                     AnsiConsole.Clear();
@@ -70,7 +83,7 @@ internal class Menu
         }
     }
 
-    internal DifficultyLevel DifficultyMenu()
+    public DifficultyLevel DifficultyMenu()
     {
         var difficultyChoice = AnsiConsole.Prompt(
             new SelectionPrompt<DifficultyLevel>()
