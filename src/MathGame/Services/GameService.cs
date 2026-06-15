@@ -6,12 +6,11 @@ namespace MathGame.Services;
 
 public class GameService : IGameService
 {
-    public void MathGame(string message, DifficultyLevel difficulty, GameType gameType)
+    public void MathGame(string message, DifficultyLevel difficulty, int questions, GameType gameType)
     {
         var score = 0;
-        const int testLength = 5;
 
-        for (var i = 0; i < testLength; i++)
+        for (var i = 0; i < questions; i++)
         {
             Console.Clear();
             Console.WriteLine(message);
@@ -49,16 +48,16 @@ public class GameService : IGameService
                 GameType.Subtraction => '-',
                 GameType.Multiplication => '*',
                 GameType.Division => '/',
-                _ => throw new ArgumentException("Invalid game type"),
+                _ => throw new ArgumentException("Invalid game type")
             };
 
             if (Helpers.IsAnswerCorrect(firstNumber, secondNumber, operatorType))
                 score++;
         }
 
-        Helpers.AddToHistory(score, testLength, gameType, difficulty);
+        Helpers.AddToHistory(score, questions, gameType, difficulty);
 
-        AnsiConsole.WriteLine($"Game over. You scored {score} out of {testLength}!");
+        AnsiConsole.WriteLine($"Game over. You scored {score} out of {questions}!");
         Console.WriteLine("Press any key to return to the main menu.");
         Console.ReadKey();
     }

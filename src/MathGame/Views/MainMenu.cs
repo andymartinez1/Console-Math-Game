@@ -17,7 +17,7 @@ public class MainMenu : IMainMenu
         MenuOptions.Subtraction,
         MenuOptions.Multiplication,
         MenuOptions.Division,
-        MenuOptions.Exit,
+        MenuOptions.Exit
     ];
 
     public MainMenu(IGameService gameService)
@@ -40,6 +40,8 @@ public class MainMenu : IMainMenu
             );
 
             var difficulty = DifficultyLevel.Beginner;
+            var questions = 5;
+
             switch (mainMenuChoice)
             {
                 case MenuOptions.ViewGameHistory:
@@ -49,26 +51,30 @@ public class MainMenu : IMainMenu
                 case MenuOptions.Addition:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameService.MathGame("Addition Game", difficulty, GameType.Addition);
+                    questions = QuestionQuantityMenu();
+                    _gameService.MathGame("Addition Game", difficulty, questions, GameType.Addition);
                     break;
                 case MenuOptions.Subtraction:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameService.MathGame("Subtraction Game", difficulty, GameType.Subtraction);
+                    questions = QuestionQuantityMenu();
+                    _gameService.MathGame("Subtraction Game", difficulty, questions, GameType.Subtraction);
                     break;
                 case MenuOptions.Multiplication:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
+                    questions = QuestionQuantityMenu();
                     _gameService.MathGame(
                         "Multiplication Game",
-                        difficulty,
+                        difficulty, questions,
                         GameType.Multiplication
                     );
                     break;
                 case MenuOptions.Division:
                     AnsiConsole.Clear();
                     difficulty = DifficultyMenu();
-                    _gameService.MathGame("Division Game", difficulty, GameType.Division);
+                    questions = QuestionQuantityMenu();
+                    _gameService.MathGame("Division Game", difficulty, questions, GameType.Division);
                     break;
                 case MenuOptions.Exit:
                     AnsiConsole.Clear();
@@ -106,5 +112,10 @@ public class MainMenu : IMainMenu
             default:
                 return 0;
         }
+    }
+
+    public int QuestionQuantityMenu()
+    {
+        return AnsiConsole.Ask<int>("How many questions do you want to answer?");
     }
 }

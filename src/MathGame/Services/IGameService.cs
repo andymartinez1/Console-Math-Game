@@ -4,5 +4,5 @@ namespace MathGame.Services;
 
 public interface IGameService
 {
-    public void MathGame(string message, DifficultyLevel difficulty, GameType gameType);
+    public void MathGame(string message, DifficultyLevel difficulty, int questions, GameType gameType);
 }

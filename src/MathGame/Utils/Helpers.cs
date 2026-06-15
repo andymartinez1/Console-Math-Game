@@ -17,7 +17,7 @@ public static class Helpers
 
         foreach (var game in GamesPlayed)
             Console.WriteLine(
-                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game: Score = {game.Score} out of {game.Rounds} points"
+                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game | Score = {game.Score} out of {game.Rounds} points"
             );
 
         Console.WriteLine("----------------------------------------------------\n");
@@ -97,7 +97,7 @@ public static class Helpers
                 Score = gameScore,
                 Rounds = roundsPlayed,
                 Type = gameType,
-                DifficultyLevel = difficultyLevel,
+                DifficultyLevel = difficultyLevel
             }
         );
     }
@@ -127,7 +127,7 @@ public static class Helpers
             '-' => firstNumber - secondNumber,
             '*' => firstNumber * secondNumber,
             '/' => firstNumber / secondNumber,
-            _ => throw new ArgumentException("Invalid operator"),
+            _ => throw new ArgumentException("Invalid operator")
         };
 
         if (userAnswer == correctAnswer)
