@@ -17,7 +17,7 @@ public static class Helpers
 
         foreach (var game in GamesPlayed)
             Console.WriteLine(
-                $"{game.Date} - {game.DifficultyLevel} Level - {game.Type} Game | Score = {game.Score} out of {game.Rounds} points"
+                $"{game.Date} | {game.DifficultyLevel} Level - {game.Type} Game | Score = {game.Score} out of {game.Rounds} points"
             );
 
         Console.WriteLine("----------------------------------------------------\n");
