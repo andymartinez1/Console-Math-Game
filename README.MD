@@ -57,8 +57,8 @@ You can verify your .NET installation with:
 
 ## Running with Docker
 
-[!IMPORTANT]
-Docker must be running before following the next commands
+> [!IMPORTANT]  
+> Docker must be running before following the next commands
 
 1. **Build the Docker image:**
    ```bash
